@@ -64,6 +64,49 @@ fn part_one() -> () {
 	println!("part one: {sum}");
 }
 
+fn part_two() -> () {
+	let input = read_lines("./input.txt");
+	let mut sum = 0;
+
+	for line in input {
+		let power;
+		let mut fewest_number = HashMap::from([
+			("red", -1),
+			("green", -1),
+			("blue", -1),
+		]);
+		let cube_groups = line.split(": ")
+							  .nth(1)
+							  .unwrap()
+							  .split("; ");
+		for group in cube_groups {
+			let cubes = group.split(", ");
+			for cube in cubes {
+				let amt = cube.split(" ")
+							  .nth(0)
+							  .unwrap()
+							  .parse::<i32>()
+							  .unwrap();
+				let color = cube.split(" ")
+								.nth(1)
+								.unwrap();
+				if fewest_number[color] < 0 {
+					fewest_number.insert(color, amt);
+				} else if fewest_number[color] < amt {
+					fewest_number.insert(color, amt);
+				}
+			}
+		}
+		power = fewest_number["red"]
+				* fewest_number["green"]
+				* fewest_number["blue"];
+		sum += power;
+	}
+
+	println!("part two: {sum}");
+}
+
 fn main() {
 	part_one();	
+	part_two();
 }
